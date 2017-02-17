@@ -6,6 +6,29 @@ class Scrabble
     end.reduce(:+)
   end
 
+  def score_with_multipliers(word, letter_multipliers, word_multiplier =1)
+    letter_values = word.upcase.chars.map do |letter|
+      point_values[letter]
+    end
+    zipped_numbers = letter_values.zip(letter_multipliers)
+    word_value = zipped_numbers.map do |letter, multipliers|
+      (letter * multipliers)
+    end
+    if word.length == 7
+      (word_value.inject(:+) + 10) * word_multiplier
+    else
+      word_value.inject(:+) * word_multiplier
+    end
+  end
+
+  def highest_scoring_word(words)
+  word_value = words.sort_by do |word|
+      score(word)
+    end
+  word_value
+  end
+
+
   def point_values
     {
       "A"=>1, "B"=>3, "C"=>3, "D"=>2,
